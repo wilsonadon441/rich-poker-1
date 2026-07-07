@@ -164,3 +164,17 @@ Validated current production-like validator profile:
 ## License
 
 MIT — see [`LICENSE`](LICENSE).
+
+## Model variant: rich-poker-1 "boost"
+
+This deployment runs the **boost** variant: a gradient-boosting-heavy stacked
+ensemble (LightGBM + XGBoost + ExtraTrees, logistic meta-learner) with
+hand-ngram side features over the baseline aggregate chunk-feature space,
+calibrated holdout-first against the validator reward. See
+`poker44_ml/variant.py` for the exact configuration and
+`training/train_variant.py` for the full training pipeline.
+
+The model is retrained automatically every day on newly released benchmark
+data (`scripts/daily_retrain.sh`, scheduled via the pm2 app in
+`scripts/miner/ecosystem.config.cjs`); a candidate is only deployed when it
+beats the live artifact on the newest holdout dates.
